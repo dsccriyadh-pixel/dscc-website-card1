@@ -64869,15 +64869,20 @@ ${metaTags}
 // src/routes/share.ts
 var router6 = (0, import_express7.Router)();
 router6.get("/:slug", async (req, res) => {
-  const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, req.params.slug)).limit(1);
   const origin = getOrigin(req);
-  if (!emp || !emp.isActive) {
+  try {
+    const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, req.params.slug)).limit(1);
+    if (!emp || !emp.isActive) {
+      res.redirect(302, `${origin}/${req.params.slug}`);
+      return;
+    }
+    const [company] = await db.select().from(companySettingsTable).limit(1);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(renderShareHtml(emp, company, origin));
+  } catch (err) {
+    req.log?.warn({ err }, "share page failed");
     res.redirect(302, `${origin}/${req.params.slug}`);
-    return;
   }
-  const [company] = await db.select().from(companySettingsTable).limit(1);
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.send(renderShareHtml(emp, company, origin));
 });
 var share_default = router6;
 
@@ -64953,7 +64958,12 @@ if (fs.existsSync(indexHtmlPath)) {
     if (req.method !== "GET" && req.method !== "HEAD") return next();
     if (req.path.startsWith("/api") || req.path.startsWith("/c")) return next();
     let html = indexHtml;
-    const seg = decodeURIComponent(req.path.replace(/^\/+/, "").replace(/\/+$/, ""));
+    let seg = "";
+    try {
+      seg = decodeURIComponent(req.path.replace(/^\/+/, "").replace(/\/+$/, ""));
+    } catch {
+      seg = "";
+    }
     if (seg && !seg.includes("/") && !seg.includes(".") && !RESERVED_SLUGS.has(seg)) {
       try {
         const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, seg)).limit(1);
