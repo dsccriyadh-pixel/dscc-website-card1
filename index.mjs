@@ -33555,14 +33555,14 @@ var require_lib5 = __commonJS({
 });
 
 // src/app.ts
-var import_express9 = __toESM(require_express2(), 1);
+var import_express8 = __toESM(require_express2(), 1);
 var import_cors = __toESM(require_lib3(), 1);
 var import_pino_http = __toESM(require_logger(), 1);
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/underscore-CPJSkOtE.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/underscore-CPJSkOtE.mjs
 function snakeToCamel(str) {
   return str ? str.replace(/([-_][a-z])/g, (match2) => match2.toUpperCase().replace(/-|_/, "")) : "";
 }
@@ -33671,7 +33671,7 @@ var requestToProxyRequest = (req) => {
   });
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/runtimeEnvironment-DHuMF-tN.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/runtimeEnvironment-DHuMF-tN.mjs
 var automatedEnvironmentVariables = [
   "CI",
   "CONTINUOUS_INTEGRATION",
@@ -33705,7 +33705,7 @@ var isProductionEnvironment = () => {
   return false;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/deprecated-D89ptCyg.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/deprecated-D89ptCyg.mjs
 var displayedWarnings = /* @__PURE__ */ new Set();
 var deprecated = (fnName, warning, key) => {
   const hideWarning = isTestEnvironment() || isProductionEnvironment();
@@ -33716,7 +33716,7 @@ var deprecated = (fnName, warning, key) => {
 ${warning}`);
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/constants-BVchI2jn.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/constants-BVchI2jn.mjs
 var LEGACY_DEV_INSTANCE_SUFFIXES = [
   ".lcl.dev",
   ".lclstage.dev",
@@ -33750,21 +33750,21 @@ var STAGING_FAPI_URL = "https://frontend-api.clerkstage.dev";
 var PROD_FAPI_URL = "https://frontend-api.clerk.dev";
 var DEFAULT_PROXY_PATH = "/__clerk";
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/isomorphicAtob-C1KQ5FtS.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/isomorphicAtob-C1KQ5FtS.mjs
 var isomorphicAtob = (data) => {
   if (typeof atob !== "undefined" && typeof atob === "function") return atob(data);
   else if (typeof globalThis.Buffer !== "undefined") return globalThis.Buffer.from(data, "base64").toString();
   return data;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/isomorphicBtoa-BBBfp_jr.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/isomorphicBtoa-BBBfp_jr.mjs
 var isomorphicBtoa = (data) => {
   if (typeof btoa !== "undefined" && typeof btoa === "function") return btoa(data);
   else if (typeof globalThis.Buffer !== "undefined") return globalThis.Buffer.from(data).toString("base64");
   return data;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/keys-jlv3GIE3.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/keys-jlv3GIE3.mjs
 var PUBLISHABLE_KEY_LIVE_PREFIX = "pk_live_";
 var PUBLISHABLE_KEY_TEST_PREFIX = "pk_test_";
 function isValidDecodedPublishableKey(decoded) {
@@ -33840,7 +33840,7 @@ var getSuffixedCookieName = (cookieName, cookieSuffix) => {
   return `${cookieName}_${cookieSuffix}`;
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/retry-NrE3SkPj.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/retry-NrE3SkPj.mjs
 var defaultOptions = {
   initialDelay: 125,
   maxDelayBetweenRetries: 0,
@@ -33891,7 +33891,7 @@ var retry = async (callback, options = {}) => {
   }
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/url-BwZwnCsF.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/url-BwZwnCsF.mjs
 function isLegacyDevAccountPortalOrigin(host) {
   return LEGACY_DEV_INSTANCE_SUFFIXES.some((legacyDevSuffix) => {
     return host.startsWith("accounts.") && host.endsWith(legacyDevSuffix);
@@ -33903,7 +33903,7 @@ function isCurrentDevAccountPortalOrigin(host) {
   });
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/clerkRuntimeError-EpUpwIcY.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/clerkRuntimeError-EpUpwIcY.mjs
 function createErrorTypeGuard(ErrorClass) {
   function typeGuard(error40) {
     const target = error40 ?? this;
@@ -33968,7 +33968,7 @@ var ClerkRuntimeError = class ClerkRuntimeError2 extends ClerkError {
 };
 var isClerkRuntimeError = createErrorTypeGuard(ClerkRuntimeError);
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/error-DAG0ASPV.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/error-DAG0ASPV.mjs
 var ClerkAPIError = class {
   static kind = "ClerkAPIError";
   code;
@@ -34570,13 +34570,13 @@ var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/buildAccountsBaseUrl.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/buildAccountsBaseUrl.mjs
 function buildAccountsBaseUrl(frontendApi) {
   if (!frontendApi) return "";
   return `https://${frontendApi.replace(/clerk\.accountsstage\./, "accountsstage.").replace(/clerk\.accounts\.|clerk\./, "accounts.")}`;
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/logger-C6joC6-q.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/logger-C6joC6-q.mjs
 var loggedMessages = /* @__PURE__ */ new Set();
 var logger = {
   warnOnce: (msg) => {
@@ -34591,7 +34591,7 @@ var logger = {
   }
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/proxy-6sFESt4u.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/proxy-6sFESt4u.mjs
 function isValidProxyUrl(key) {
   if (!key) return true;
   return isHttpOrHttps(key) || isProxyUrlRelative(key);
@@ -34626,7 +34626,7 @@ function getAutoProxyUrlFromEnvironment({ publishableKey, hasDomain = false, has
   return AUTO_PROXY_PATH;
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/authorization-D10DwNv6.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/authorization-D10DwNv6.mjs
 var TYPES_TO_OBJECTS = {
   strict_mfa: {
     afterMinutes: 10,
@@ -34796,7 +34796,7 @@ var createCheckAuthorization = (options) => {
   };
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/jwtPayloadParser.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/jwtPayloadParser.mjs
 var parsePermissions = ({ per, fpm }) => {
   if (!per || !fpm) return {
     permissions: [],
@@ -34866,7 +34866,7 @@ var __experimental_JWTPayloadToAuthObjectProperties = (claims) => {
   };
 };
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/pathToRegexp-CNkSDpje.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/pathToRegexp-CNkSDpje.mjs
 function _(r) {
   for (var n = [], e = 0; e < r.length; ) {
     var a = r[e];
@@ -41184,7 +41184,7 @@ function withLegacyReturn(cb) {
   };
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/telemetry-DmiY4LSf.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/telemetry-DmiY4LSf.mjs
 var PROCESS_FLAG = /* @__PURE__ */ Symbol.for("@clerk/shared.telemetryNoticeShown");
 var NOTICE_LINES = [
   "Attention: Clerk collects telemetry data from its SDKs when connected to development instances.",
@@ -41746,7 +41746,7 @@ async function clerkFrontendApiProxy(request, options) {
   }
 }
 
-// ../../node_modules/.pnpm/@clerk+shared@4.15.0/node_modules/@clerk/shared/dist/runtime/_chunks/handleValueOrFn-xqbU450o.mjs
+// ../../node_modules/.pnpm/@clerk+shared@4.15.0_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/@clerk/shared/dist/runtime/_chunks/handleValueOrFn-xqbU450o.mjs
 function handleValueOrFn(value, url2, defaultValue) {
   if (typeof value === "function") return value(url2);
   if (typeof value !== "undefined") return value;
@@ -41981,7 +41981,7 @@ var getAuth = ((req, options) => {
 });
 
 // src/routes/index.ts
-var import_express7 = __toESM(require_express2(), 1);
+var import_express6 = __toESM(require_express2(), 1);
 
 // src/routes/health.ts
 var import_express = __toESM(require_express2(), 1);
@@ -64616,8 +64616,19 @@ var pool = new Pool3({ connectionString: process.env.DATABASE_URL });
 var db = drizzle(pool, { schema: schema_exports });
 
 // src/lib/auth.ts
+var clerkConfigured = Boolean(
+  process.env.CLERK_SECRET_KEY && process.env.CLERK_PUBLISHABLE_KEY
+);
+function getAuthSafe(req) {
+  if (!clerkConfigured) return { userId: null };
+  try {
+    return getAuth(req);
+  } catch {
+    return { userId: null };
+  }
+}
 var requireAuth = (req, res, next) => {
-  const auth = getAuth(req);
+  const auth = getAuthSafe(req);
   if (!auth.userId) {
     res.status(401).json({ error: "Unauthorized" });
     return;
@@ -64698,7 +64709,7 @@ function getOrigin(req) {
 // src/routes/employees.ts
 var router3 = (0, import_express4.Router)();
 router3.get("/employees", async (req, res) => {
-  const auth = getAuth(req);
+  const auth = getAuthSafe(req);
   const includeInactive = req.query.includeInactive === "true" && !!auth.userId;
   const rows = includeInactive ? await db.select().from(employeesTable).orderBy(asc(employeesTable.sortOrder), asc(employeesTable.id)) : await db.select().from(employeesTable).where(eq(employeesTable.isActive, true)).orderBy(asc(employeesTable.sortOrder), asc(employeesTable.id));
   res.json(rows);
@@ -64769,8 +64780,8 @@ router3.delete("/employees/:id", requireAuth, async (req, res) => {
 var employees_default = router3;
 
 // src/routes/catalog.ts
-var import_express6 = __toESM(require_express2(), 1);
-var router4 = (0, import_express6.Router)();
+var import_express5 = __toESM(require_express2(), 1);
+var router4 = (0, import_express5.Router)();
 router4.get("/services", async (_req, res) => {
   const rows = await db.select().from(servicesTable).orderBy(asc(servicesTable.sortOrder), asc(servicesTable.id));
   res.json(rows);
@@ -64791,7 +64802,7 @@ router4.get("/documents", async (_req, res) => {
 var catalog_default = router4;
 
 // src/routes/index.ts
-var router5 = (0, import_express7.Router)();
+var router5 = (0, import_express6.Router)();
 router5.use(health_default);
 router5.use(company_default);
 router5.use(employees_default);
@@ -64799,7 +64810,7 @@ router5.use(catalog_default);
 var routes_default = router5;
 
 // src/routes/share.ts
-var import_express8 = __toESM(require_express2(), 1);
+var import_express7 = __toESM(require_express2(), 1);
 
 // src/lib/shareHtml.ts
 function escapeHtml(value) {
@@ -64843,7 +64854,7 @@ function renderShareHtml(emp, company, origin) {
 }
 
 // src/routes/share.ts
-var router6 = (0, import_express8.Router)();
+var router6 = (0, import_express7.Router)();
 router6.get("/:slug", async (req, res) => {
   const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, req.params.slug)).limit(1);
   const origin = getOrigin(req);
@@ -64876,7 +64887,7 @@ var logger2 = (0, import_pino.default)({
 });
 
 // src/app.ts
-var app = (0, import_express9.default)();
+var app = (0, import_express8.default)();
 app.use(
   (0, import_pino_http.default)({
     logger: logger2,
@@ -64897,9 +64908,15 @@ app.use(
   })
 );
 app.use((0, import_cors.default)({ credentials: true, origin: true }));
-app.use(import_express9.default.json());
-app.use(import_express9.default.urlencoded({ extended: true }));
-app.use(clerkMiddleware());
+app.use(import_express8.default.json());
+app.use(import_express8.default.urlencoded({ extended: true }));
+if (clerkConfigured) {
+  app.use(clerkMiddleware());
+} else {
+  logger2.warn(
+    "Clerk not fully configured (needs CLERK_SECRET_KEY + CLERK_PUBLISHABLE_KEY). Admin auth disabled; public pages still work."
+  );
+}
 app.use("/api", routes_default);
 app.use("/c", share_default);
 var moduleDir = path.dirname(fileURLToPath(import.meta.url));
@@ -64912,7 +64929,7 @@ if (fs.existsSync(indexHtmlPath)) {
   };
   const snippet = `<script>window.__APP_CONFIG__=${JSON.stringify(config2)};</script>`;
   const indexHtml = rawHtml.includes("</head>") ? rawHtml.replace("</head>", `${snippet}</head>`) : `${snippet}${rawHtml}`;
-  app.use(import_express9.default.static(publicDir, { index: false }));
+  app.use(import_express8.default.static(publicDir, { index: false }));
   app.use((req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") return next();
     if (req.path.startsWith("/api") || req.path.startsWith("/c")) return next();
