@@ -56366,7 +56366,7 @@ var COOKIE_OPTS = {
   // 30 days
 };
 router2.post("/auth/login", (req, res) => {
-  const expected = process.env.ADMIN_PASSWORD;
+  const expected = process.env.ADMIN_PASSWORD?.trim();
   if (!expected) {
     res.status(503).json({ error: "Admin login is not configured" });
     return;
@@ -56376,7 +56376,7 @@ router2.post("/auth/login", (req, res) => {
     res.status(429).json({ error: "Too many attempts. Please try again later." });
     return;
   }
-  const password = typeof req.body?.password === "string" ? req.body.password : "";
+  const password = typeof req.body?.password === "string" ? req.body.password.trim() : "";
   if (!password || !passwordMatches(password, expected)) {
     recordFailure(ip);
     res.status(401).json({ error: "Invalid password" });
