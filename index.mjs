@@ -56686,8 +56686,8 @@ app.use(
   })
 );
 app.use((0, import_cors.default)({ credentials: true, origin: true }));
-app.use(import_express8.default.json());
-app.use(import_express8.default.urlencoded({ extended: true }));
+app.use(import_express8.default.json({ limit: "8mb" }));
+app.use(import_express8.default.urlencoded({ extended: true, limit: "8mb" }));
 var cookieSecret = process.env.SESSION_SECRET || process.env.ADMIN_PASSWORD || crypto3.randomBytes(32).toString("hex");
 app.use((0, import_cookie_parser.default)(cookieSecret));
 if (!process.env.ADMIN_PASSWORD) {
