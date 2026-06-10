@@ -56429,6 +56429,18 @@ var import_express4 = __toESM(require_express2(), 1);
 function esc2(value) {
   return value.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
 }
+function photoLine(photoUrl, origin) {
+  const dataMatch = /^data:image\/([a-zA-Z0-9.+-]+);base64,(.+)$/i.exec(
+    photoUrl
+  );
+  if (dataMatch) {
+    const type = dataMatch[1].toUpperCase().replace("JPG", "JPEG");
+    const base643 = dataMatch[2];
+    return `PHOTO;ENCODING=b;TYPE=${type}:${base643}`;
+  }
+  const uri = /^https?:\/\//i.test(photoUrl) ? photoUrl : `${origin}${photoUrl}`;
+  return `PHOTO;VALUE=URI:${uri}`;
+}
 function buildVCard(emp, company, origin) {
   const orgName = company?.nameEn ?? "DSCC Group";
   const lines = [
@@ -56443,13 +56455,26 @@ function buildVCard(emp, company, origin) {
     `EMAIL;TYPE=WORK:${esc2(emp.email)}`
   ];
   if (emp.photoUrl) {
-    lines.push(`PHOTO;VALUE=URI:${origin}${emp.photoUrl}`);
+    const photo = photoLine(emp.photoUrl, origin);
+    if (photo) lines.push(photo);
   }
   if (company?.website) {
     lines.push(`URL:${esc2(company.website)}`);
   }
   if (company?.addressEn) {
     lines.push(`ADR;TYPE=WORK:;;${esc2(company.addressEn)};;;;`);
+  }
+  const socials = [
+    ["instagram", company?.instagram],
+    ["facebook", company?.facebook],
+    ["tiktok", company?.tiktok],
+    ["youtube", company?.youtube],
+    ["linkedin", company?.linkedin],
+    ["twitter", company?.twitter],
+    ["snapchat", company?.snapchat]
+  ];
+  for (const [type, url2] of socials) {
+    if (url2) lines.push(`X-SOCIALPROFILE;TYPE=${type}:${esc2(url2)}`);
   }
   lines.push("END:VCARD");
   return lines.join("\r\n");
