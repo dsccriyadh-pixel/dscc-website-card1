@@ -1301,46 +1301,46 @@ var require_cert_signatures = __commonJS({
     function x509Error(msg, cert) {
       return new Error("SASL channel binding: " + msg + " when parsing public certificate " + cert.toString("base64"));
     }
-    function readASN1Length(data, index) {
-      let length = data[index++];
-      if (length < 128) return { length, index };
+    function readASN1Length(data, index2) {
+      let length = data[index2++];
+      if (length < 128) return { length, index: index2 };
       const lengthBytes = length & 127;
       if (lengthBytes > 4) throw x509Error("bad length", data);
       length = 0;
       for (let i = 0; i < lengthBytes; i++) {
-        length = length << 8 | data[index++];
+        length = length << 8 | data[index2++];
       }
-      return { length, index };
+      return { length, index: index2 };
     }
-    function readASN1OID(data, index) {
-      if (data[index++] !== 6) throw x509Error("non-OID data", data);
-      const { length: OIDLength, index: indexAfterOIDLength } = readASN1Length(data, index);
-      index = indexAfterOIDLength;
-      const lastIndex = index + OIDLength;
-      const byte1 = data[index++];
+    function readASN1OID(data, index2) {
+      if (data[index2++] !== 6) throw x509Error("non-OID data", data);
+      const { length: OIDLength, index: indexAfterOIDLength } = readASN1Length(data, index2);
+      index2 = indexAfterOIDLength;
+      const lastIndex = index2 + OIDLength;
+      const byte1 = data[index2++];
       let oid = (byte1 / 40 >> 0) + "." + byte1 % 40;
-      while (index < lastIndex) {
+      while (index2 < lastIndex) {
         let value = 0;
-        while (index < lastIndex) {
-          const nextByte = data[index++];
+        while (index2 < lastIndex) {
+          const nextByte = data[index2++];
           value = value << 7 | nextByte & 127;
           if (nextByte < 128) break;
         }
         oid += "." + value;
       }
-      return { oid, index };
+      return { oid, index: index2 };
     }
-    function expectASN1Seq(data, index) {
-      if (data[index++] !== 48) throw x509Error("non-sequence data", data);
-      return readASN1Length(data, index);
+    function expectASN1Seq(data, index2) {
+      if (data[index2++] !== 48) throw x509Error("non-sequence data", data);
+      return readASN1Length(data, index2);
     }
-    function signatureAlgorithmHashFromCertificate(data, index) {
-      if (index === void 0) index = 0;
-      index = expectASN1Seq(data, index).index;
-      const { length: certInfoLength, index: indexAfterCertInfoLength } = expectASN1Seq(data, index);
-      index = indexAfterCertInfoLength + certInfoLength;
-      index = expectASN1Seq(data, index).index;
-      const { oid, index: indexAfterOID } = readASN1OID(data, index);
+    function signatureAlgorithmHashFromCertificate(data, index2) {
+      if (index2 === void 0) index2 = 0;
+      index2 = expectASN1Seq(data, index2).index;
+      const { length: certInfoLength, index: indexAfterCertInfoLength } = expectASN1Seq(data, index2);
+      index2 = indexAfterCertInfoLength + certInfoLength;
+      index2 = expectASN1Seq(data, index2).index;
+      const { oid, index: indexAfterOID } = readASN1OID(data, index2);
       switch (oid) {
         // RSA
         case "1.2.840.113549.1.1.4":
@@ -1372,12 +1372,12 @@ var require_cert_signatures = __commonJS({
           return "SHA-512";
         // RSASSA-PSS: hash is indicated separately
         case "1.2.840.113549.1.1.10": {
-          index = indexAfterOID;
-          index = expectASN1Seq(data, index).index;
-          if (data[index++] !== 160) throw x509Error("non-tag data", data);
-          index = readASN1Length(data, index).index;
-          index = expectASN1Seq(data, index).index;
-          const { oid: hashOID } = readASN1OID(data, index);
+          index2 = indexAfterOID;
+          index2 = expectASN1Seq(data, index2).index;
+          if (data[index2++] !== 160) throw x509Error("non-tag data", data);
+          index2 = readASN1Length(data, index2).index;
+          index2 = expectASN1Seq(data, index2).index;
+          const { oid: hashOID } = readASN1OID(data, index2);
           switch (hashOID) {
             // standalone hash OIDs
             case "1.2.840.113549.2.5":
@@ -4172,9 +4172,9 @@ var require_client = __commonJS({
             queryCallback(error40);
             query.callback = () => {
             };
-            const index = this._queryQueue.indexOf(query);
-            if (index > -1) {
-              this._queryQueue.splice(index, 1);
+            const index2 = this._queryQueue.indexOf(query);
+            if (index2 > -1) {
+              this._queryQueue.splice(index2, 1);
             }
             this._pulseQueryQueue();
           }, readTimeout);
@@ -4964,9 +4964,9 @@ var require_client2 = __commonJS({
           queryCallback(error40);
           query.callback = () => {
           };
-          const index = this._queryQueue.indexOf(query);
-          if (index > -1) {
-            this._queryQueue.splice(index, 1);
+          const index2 = this._queryQueue.indexOf(query);
+          if (index2 > -1) {
+            this._queryQueue.splice(index2, 1);
           }
           this._pulseQueryQueue();
         }, readTimeout);
@@ -6623,8 +6623,8 @@ function haveSameKeys(left, right) {
   if (leftKeys.length !== rightKeys.length) {
     return false;
   }
-  for (const [index, key] of leftKeys.entries()) {
-    if (key !== rightKeys[index]) {
+  for (const [index2, key] of leftKeys.entries()) {
+    if (key !== rightKeys[index2]) {
       return false;
     }
   }
@@ -8119,6 +8119,115 @@ var pgTable = (name, columns, extraConfig) => {
   return pgTableWithSchema(name, columns, extraConfig, void 0);
 };
 
+// ../node_modules/.pnpm/drizzle-orm@0.45.2_@types+pg@8.20.0_pg@8.20.0/node_modules/drizzle-orm/pg-core/indexes.js
+var IndexBuilderOn = class {
+  constructor(unique, name) {
+    this.unique = unique;
+    this.name = name;
+  }
+  static [entityKind] = "PgIndexBuilderOn";
+  on(...columns) {
+    return new IndexBuilder(
+      columns.map((it) => {
+        if (is(it, SQL)) {
+          return it;
+        }
+        it = it;
+        const clonedIndexedColumn = new IndexedColumn(it.name, !!it.keyAsName, it.columnType, it.indexConfig);
+        it.indexConfig = JSON.parse(JSON.stringify(it.defaultConfig));
+        return clonedIndexedColumn;
+      }),
+      this.unique,
+      false,
+      this.name
+    );
+  }
+  onOnly(...columns) {
+    return new IndexBuilder(
+      columns.map((it) => {
+        if (is(it, SQL)) {
+          return it;
+        }
+        it = it;
+        const clonedIndexedColumn = new IndexedColumn(it.name, !!it.keyAsName, it.columnType, it.indexConfig);
+        it.indexConfig = it.defaultConfig;
+        return clonedIndexedColumn;
+      }),
+      this.unique,
+      true,
+      this.name
+    );
+  }
+  /**
+   * Specify what index method to use. Choices are `btree`, `hash`, `gist`, `spgist`, `gin`, `brin`, or user-installed access methods like `bloom`. The default method is `btree.
+   *
+   * If you have the `pg_vector` extension installed in your database, you can use the `hnsw` and `ivfflat` options, which are predefined types.
+   *
+   * **You can always specify any string you want in the method, in case Drizzle doesn't have it natively in its types**
+   *
+   * @param method The name of the index method to be used
+   * @param columns
+   * @returns
+   */
+  using(method, ...columns) {
+    return new IndexBuilder(
+      columns.map((it) => {
+        if (is(it, SQL)) {
+          return it;
+        }
+        it = it;
+        const clonedIndexedColumn = new IndexedColumn(it.name, !!it.keyAsName, it.columnType, it.indexConfig);
+        it.indexConfig = JSON.parse(JSON.stringify(it.defaultConfig));
+        return clonedIndexedColumn;
+      }),
+      this.unique,
+      true,
+      this.name,
+      method
+    );
+  }
+};
+var IndexBuilder = class {
+  static [entityKind] = "PgIndexBuilder";
+  /** @internal */
+  config;
+  constructor(columns, unique, only, name, method = "btree") {
+    this.config = {
+      name,
+      columns,
+      unique,
+      only,
+      method
+    };
+  }
+  concurrently() {
+    this.config.concurrently = true;
+    return this;
+  }
+  with(obj) {
+    this.config.with = obj;
+    return this;
+  }
+  where(condition) {
+    this.config.where = condition;
+    return this;
+  }
+  /** @internal */
+  build(table) {
+    return new Index(this.config, table);
+  }
+};
+var Index = class {
+  static [entityKind] = "PgIndex";
+  config;
+  constructor(config2, table) {
+    this.config = { ...config2, table };
+  }
+};
+function index(name) {
+  return new IndexBuilderOn(false, name);
+}
+
 // ../node_modules/.pnpm/drizzle-orm@0.45.2_@types+pg@8.20.0_pg@8.20.0/node_modules/drizzle-orm/pg-core/primary-keys.js
 var PrimaryKeyBuilder = class {
   static [entityKind] = "PgPrimaryKeyBuilder";
@@ -8777,8 +8886,8 @@ var PgDialect = class {
       return void 0;
     }
     const joinsArray = [];
-    for (const [index, joinMeta] of joins.entries()) {
-      if (index === 0) {
+    for (const [index2, joinMeta] of joins.entries()) {
+      if (index2 === 0) {
         joinsArray.push(sql` `);
       }
       const table = joinMeta.table;
@@ -8805,7 +8914,7 @@ var PgDialect = class {
           sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${table}${onSql}`
         );
       }
-      if (index < joins.length - 1) {
+      if (index2 < joins.length - 1) {
         joinsArray.push(sql` `);
       }
     }
@@ -12153,6 +12262,7 @@ function drizzle(...params) {
 // ../lib/db/src/schema/index.ts
 var schema_exports = {};
 __export(schema_exports, {
+  cardViewsTable: () => cardViewsTable,
   companyDocumentsTable: () => companyDocumentsTable,
   companySettingsTable: () => companySettingsTable,
   employeesTable: () => employeesTable,
@@ -14678,11 +14788,11 @@ var $ZodDate = /* @__PURE__ */ $constructor("$ZodDate", (inst, def) => {
     return payload;
   };
 });
-function handleArrayResult(result, final, index) {
+function handleArrayResult(result, final, index2) {
   if (result.issues.length) {
-    final.issues.push(...prefixIssues(index, result.issues));
+    final.issues.push(...prefixIssues(index2, result.issues));
   }
-  final.value[index] = result.value;
+  final.value[index2] = result.value;
 }
 var $ZodArray = /* @__PURE__ */ $constructor("$ZodArray", (inst, def) => {
   $ZodType.init(inst, def);
@@ -15066,14 +15176,14 @@ function mergeValues(a, b) {
       return { valid: false, mergeErrorPath: [] };
     }
     const newArray = [];
-    for (let index = 0; index < a.length; index++) {
-      const itemA = a[index];
-      const itemB = b[index];
+    for (let index2 = 0; index2 < a.length; index2++) {
+      const itemA = a[index2];
+      const itemB = b[index2];
       const sharedValue = mergeValues(itemA, itemB);
       if (!sharedValue.valid) {
         return {
           valid: false,
-          mergeErrorPath: [index, ...sharedValue.mergeErrorPath]
+          mergeErrorPath: [index2, ...sharedValue.mergeErrorPath]
         };
       }
       newArray.push(sharedValue.data);
@@ -15165,11 +15275,11 @@ var $ZodTuple = /* @__PURE__ */ $constructor("$ZodTuple", (inst, def) => {
     return payload;
   };
 });
-function handleTupleResult(result, final, index) {
+function handleTupleResult(result, final, index2) {
   if (result.issues.length) {
-    final.issues.push(...prefixIssues(index, result.issues));
+    final.issues.push(...prefixIssues(index2, result.issues));
   }
-  final.value[index] = result.value;
+  final.value[index2] = result.value;
 }
 var $ZodRecord = /* @__PURE__ */ $constructor("$ZodRecord", (inst, def) => {
   $ZodType.init(inst, def);
@@ -23598,6 +23708,7 @@ var employeesTable = pgTable("employees", {
   departmentEn: text("department_en").notNull(),
   departmentAr: text("department_ar").notNull(),
   photoUrl: text("photo_url"),
+  shareImageUrl: text("share_image_url"),
   mobile: text("mobile").notNull(),
   whatsapp: text("whatsapp").notNull(),
   email: text("email").notNull(),
@@ -23613,6 +23724,21 @@ var insertEmployeeSchema = createInsertSchema(employeesTable).omit({
   createdAt: true,
   updatedAt: true
 });
+
+// ../lib/db/src/schema/card-views.ts
+var cardViewsTable = pgTable(
+  "card_views",
+  {
+    id: serial("id").primaryKey(),
+    employeeId: integer("employee_id").notNull().references(() => employeesTable.id, { onDelete: "cascade" }),
+    visitorHash: text("visitor_hash").notNull(),
+    viewedAt: timestamp("viewed_at", { withTimezone: true }).notNull().defaultNow()
+  },
+  (t) => [
+    index("card_views_employee_idx").on(t.employeeId),
+    index("card_views_viewed_at_idx").on(t.viewedAt)
+  ]
+);
 
 // ../lib/db/src/schema/services.ts
 var servicesTable = pgTable("services", {
