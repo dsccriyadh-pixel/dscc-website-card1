@@ -56581,7 +56581,16 @@ function buildShareMeta(emp, company, origin) {
   const cardUrl = `${origin}/${emp.slug}`;
   const title = `${emp.fullNameAr} \xB7 ${emp.positionAr}`;
   const description = `${emp.positionAr} \u2014 ${emp.departmentAr} \xB7 ${orgName}. \u0627\u0636\u063A\u0637 \u0644\u0639\u0631\u0636 \u0627\u0644\u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0631\u0642\u0645\u064A\u0629: \u0627\u062A\u0635\u0627\u0644\u060C \u0648\u0627\u062A\u0633\u0627\u0628\u060C \u0628\u0631\u064A\u062F\u060C \u0648\u062D\u0641\u0638 \u062C\u0647\u0629 \u0627\u0644\u0627\u062A\u0635\u0627\u0644.`;
-  const image = emp.photoUrl ? `${origin}${emp.photoUrl}` : `${origin}/logo.svg`;
+  let image;
+  if (!emp.photoUrl) {
+    image = `${origin}/logo.svg`;
+  } else if (emp.photoUrl.startsWith("data:")) {
+    image = `${origin}/logo.svg`;
+  } else if (/^https?:\/\//.test(emp.photoUrl)) {
+    image = emp.photoUrl;
+  } else {
+    image = `${origin}${emp.photoUrl}`;
+  }
   return { title, description, image, url: cardUrl, siteName: orgName };
 }
 function renderShareMetaTags(emp, company, origin) {
