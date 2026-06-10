@@ -56646,6 +56646,8 @@ function getClientIp(req) {
   return firstHeader(req.headers["x-forwarded-for"]) || req.ip || req.socket?.remoteAddress || "unknown";
 }
 function getOrigin(req) {
+  const configured = process.env.PUBLIC_ORIGIN?.trim();
+  if (configured) return configured.replace(/\/+$/, "");
   const proto = firstHeader(req.headers["x-forwarded-proto"]) || req.protocol || "https";
   const host = firstHeader(req.headers["x-forwarded-host"]) || req.headers.host || "localhost";
   return `${proto}://${host}`;
@@ -56931,6 +56933,7 @@ var logger = (0, import_pino.default)({
 
 // src/app.ts
 var app = (0, import_express9.default)();
+app.set("trust proxy", 1);
 app.use(
   (0, import_pino_http.default)({
     logger,
