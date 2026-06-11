@@ -56584,7 +56584,7 @@ import crypto3 from "node:crypto";
 
 // src/lib/vcard.ts
 function esc2(value) {
-  return value.replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+  return value.replace(/\\/g, "\\\\").replace(/\r\n|\r|\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
 }
 function photoLine(photoUrl, origin) {
   const dataMatch = /^data:image\/([a-zA-Z0-9.+-]+);base64,(.+)$/i.exec(
@@ -56655,6 +56655,25 @@ function getOrigin(req) {
 
 // src/routes/employees.ts
 var router4 = (0, import_express4.Router)();
+var SLUG_RE = /^[a-z0-9-]{1,64}$/;
+function isUniqueViolation(err) {
+  const e = err;
+  return e?.code === "23505" || e?.cause?.code === "23505";
+}
+var VIEW_COOLDOWN_MS = 6e4;
+var recentViews = /* @__PURE__ */ new Map();
+function shouldRecordView(key) {
+  const now = Date.now();
+  if (recentViews.size > 5e3) {
+    for (const [k, ts] of recentViews) {
+      if (now - ts > VIEW_COOLDOWN_MS) recentViews.delete(k);
+    }
+  }
+  const last = recentViews.get(key);
+  if (last && now - last < VIEW_COOLDOWN_MS) return false;
+  recentViews.set(key, now);
+  return true;
+}
 router4.get("/employees", requireAuth, async (req, res) => {
   const includeInactive = req.query.includeInactive === "true";
   const rows = includeInactive ? await db.select().from(employeesTable).orderBy(asc(employeesTable.sortOrder), asc(employeesTable.id)) : await db.select().from(employeesTable).where(eq(employeesTable.isActive, true)).orderBy(asc(employeesTable.sortOrder), asc(employeesTable.id));
@@ -56666,8 +56685,22 @@ router4.post("/employees", requireAuth, async (req, res) => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [created] = await db.insert(employeesTable).values(parsed.data).returning();
-  res.status(201).json(created);
+  if (!SLUG_RE.test(parsed.data.slug)) {
+    res.status(400).json({
+      error: "Slug must be lowercase letters, numbers and hyphens (max 64)."
+    });
+    return;
+  }
+  try {
+    const [created] = await db.insert(employeesTable).values(parsed.data).returning();
+    res.status(201).json(created);
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      res.status(409).json({ error: "An employee with this slug already exists." });
+      return;
+    }
+    throw err;
+  }
 });
 router4.get("/employees/lookup/:slug", async (req, res) => {
   const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, req.params.slug)).limit(1);
@@ -56698,7 +56731,9 @@ router4.post("/employees/:slug/view", async (req, res) => {
     const salt = process.env.SESSION_SECRET || process.env.ADMIN_PASSWORD;
     if (emp && emp.isActive && salt) {
       const visitorHash = crypto3.createHmac("sha256", salt).update(`${getClientIp(req)}|${req.headers["user-agent"] ?? ""}`).digest("hex");
-      await db.insert(cardViewsTable).values({ employeeId: emp.id, visitorHash });
+      if (shouldRecordView(`${emp.id}|${visitorHash}`)) {
+        await db.insert(cardViewsTable).values({ employeeId: emp.id, visitorHash });
+      }
     }
   } catch (err) {
     req.log?.warn({ err }, "record view failed");
@@ -56716,12 +56751,26 @@ router4.patch("/employees/:id", requireAuth, async (req, res) => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [updated] = await db.update(employeesTable).set(parsed.data).where(eq(employeesTable.id, id)).returning();
-  if (!updated) {
-    res.status(404).json({ error: "Employee not found" });
+  if (parsed.data.slug !== void 0 && !SLUG_RE.test(parsed.data.slug)) {
+    res.status(400).json({
+      error: "Slug must be lowercase letters, numbers and hyphens (max 64)."
+    });
     return;
   }
-  res.json(updated);
+  try {
+    const [updated] = await db.update(employeesTable).set(parsed.data).where(eq(employeesTable.id, id)).returning();
+    if (!updated) {
+      res.status(404).json({ error: "Employee not found" });
+      return;
+    }
+    res.json(updated);
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      res.status(409).json({ error: "An employee with this slug already exists." });
+      return;
+    }
+    throw err;
+  }
 });
 router4.delete("/employees/:id", requireAuth, async (req, res) => {
   const id = Number(req.params.id);
@@ -56857,7 +56906,7 @@ function renderShareHtml(emp, company, origin) {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 ${metaTags}
 <meta http-equiv="refresh" content="0; url=${url2}" />
-<script>window.location.replace(${JSON.stringify(cardUrl)});</script>
+<script>window.location.replace(${JSON.stringify(cardUrl).replace(/</g, "\\u003c")});</script>
 </head>
 <body>
 <p>Redirecting to <a href="${url2}">${escapeHtml(emp.fullNameAr)}</a></p>
