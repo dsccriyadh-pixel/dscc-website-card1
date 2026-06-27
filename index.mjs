@@ -56895,6 +56895,34 @@ function renderShareMetaTags(emp, company, origin) {
 <meta name="twitter:description" content="${d}" />
 <meta name="twitter:image" content="${img}" />`;
 }
+function renderEventMetaTags(origin) {
+  const title = "\u062F\u0639\u0648\u0629 \u062E\u0627\u0635\u0629 \xB7 \u0645\u0634\u0631\u0648\u0639 \u0631\u0633\u0646 \u0641\u064A\u0644\u062C | DSCC";
+  const description = "\u064A\u0633\u0631\u0651 \u0645\u062C\u0645\u0648\u0639\u0629 DSCC \u0623\u0646 \u062A\u062A\u0634\u0631\u0641 \u0628\u062F\u0639\u0648\u062A\u0643\u0645 \u0644\u062D\u0636\u0648\u0631 \u0641\u0639\u0627\u0644\u064A\u0629 \u0645\u0634\u0631\u0648\u0639 \u0631\u0633\u0646 \u0641\u064A\u0644\u062C \u2014 28 \u064A\u0648\u0646\u064A\u0648 \u062D\u062A\u0649 1 \u064A\u0648\u0644\u064A\u0648 2026\u060C \u0627\u0633\u062A\u0631\u0627\u062D\u0629 \u0627\u0644\u0645\u0627\u0633\u0629 \u0627\u0644\u0645\u0644\u0643\u064A\u0629. \u0627\u0636\u063A\u0637 \u0644\u0639\u0631\u0636 \u0627\u0644\u062F\u0639\u0648\u0629 \u0648\u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644.";
+  const image = `${origin}/event-share.jpg`;
+  const url2 = `${origin}/event`;
+  const t = escapeHtml(title);
+  const d = escapeHtml(description);
+  const img = escapeHtml(image);
+  const u = escapeHtml(url2);
+  return `<title>${t}</title>
+<meta name="description" content="${d}" />
+<link rel="canonical" href="${u}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="${t}" />
+<meta property="og:description" content="${d}" />
+<meta property="og:image" content="${img}" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="${t}" />
+<meta property="og:url" content="${u}" />
+<meta property="og:site_name" content="DSCC Group" />
+<meta property="og:locale" content="ar_AR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${t}" />
+<meta name="twitter:description" content="${d}" />
+<meta name="twitter:image" content="${img}" />`;
+}
 function renderShareHtml(emp, company, origin) {
   const cardUrl = `${origin}/${emp.slug}`;
   const metaTags = renderShareMetaTags(emp, company, origin);
@@ -57036,7 +57064,9 @@ if (fs.existsSync(indexHtmlPath)) {
     } catch {
       seg = "";
     }
-    if (seg && !seg.includes("/") && !seg.includes(".") && !RESERVED_SLUGS.has(seg)) {
+    if (seg === "event") {
+      html = injectMeta(indexHtml, renderEventMetaTags(getOrigin(req)));
+    } else if (seg && !seg.includes("/") && !seg.includes(".") && !RESERVED_SLUGS.has(seg)) {
       try {
         const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, seg)).limit(1);
         if (emp && emp.isActive) {
