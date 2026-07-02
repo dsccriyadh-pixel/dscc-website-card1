@@ -56988,6 +56988,32 @@ router8.get("/:slug/share.jpg", async (req, res) => {
     res.redirect(302, `${origin}/logo.svg`);
   }
 });
+router8.get("/:slug/photo.jpg", async (req, res) => {
+  const origin = getOrigin(req);
+  try {
+    const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, req.params.slug)).limit(1);
+    if (!emp || !emp.isActive || !emp.photoUrl) {
+      res.redirect(302, `${origin}/logo.png`);
+      return;
+    }
+    const m = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s.exec(emp.photoUrl);
+    if (!m) {
+      res.redirect(302, `${origin}/logo.png`);
+      return;
+    }
+    const buf = Buffer.from(m[2], "base64");
+    if (buf.length > 3 * 1024 * 1024) {
+      res.redirect(302, `${origin}/logo.png`);
+      return;
+    }
+    res.setHeader("Content-Type", m[1]);
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.send(buf);
+  } catch (err) {
+    req.log?.warn({ err }, "employee photo failed");
+    res.redirect(302, `${origin}/logo.png`);
+  }
+});
 var share_default = router8;
 
 // src/lib/logger.ts
