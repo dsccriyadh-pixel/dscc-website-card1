@@ -83,9 +83,11 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
       </div>
     </td>
     <td style="vertical-align:top;padding:0 0 0 16px;">
-      <div style="font-size:19px;font-weight:bold;color:${vi};line-height:22px;">${Zt(e.nameEn)}</div>
-      <div dir="rtl" style="font-size:19px;font-weight:bold;color:${vi};line-height:24px;text-align:left;font-family:'Cairo','Segoe UI',Tahoma,'Geeza Pro',Arial,sans-serif;">${Zt(e.nameAr)}</div>
-      <div style="font-size:13px;font-weight:bold;color:${Ir};margin-top:5px;line-height:18px;">${Zt(e.positionEn)} &nbsp;&middot;&nbsp; ${Zt(e.departmentEn)}</div>
+      <div style="display:inline-block;text-align:center;">
+        <div style="font-size:19px;font-weight:bold;color:${vi};line-height:22px;text-align:center;">${Zt(e.nameEn)}</div>
+        <div dir="rtl" style="font-size:19px;font-weight:bold;color:${vi};line-height:24px;text-align:center;font-family:'Cairo','Segoe UI',Tahoma,'Geeza Pro',Arial,sans-serif;">${Zt(e.nameAr)}</div>
+        <div style="font-size:13px;font-weight:bold;color:${Ir};margin-top:5px;line-height:18px;text-align:center;">${Zt(e.positionEn)} &nbsp;&middot;&nbsp; ${Zt(e.departmentEn)}</div>
+      </div>
       <div style="margin-top:9px;">
         ${l_(e)}
       </div>
@@ -111,9 +113,11 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
           </td>
           <td style="vertical-align:top;">
             <img src="${e.logo}" width="104" alt="DSCC" style="width:104px;height:auto;display:block;margin-bottom:7px;" />
-            <div style="font-size:18px;font-weight:bold;color:${vi};line-height:22px;">${Zt(e.nameEn)}</div>
-            <div dir="rtl" style="font-size:18px;font-weight:bold;color:${vi};line-height:23px;text-align:left;font-family:'Cairo','Segoe UI',Tahoma,'Geeza Pro',Arial,sans-serif;">${Zt(e.nameAr)}</div>
-            <div style="font-size:12px;font-weight:bold;color:${Ir};margin-top:4px;line-height:16px;">${Zt(e.positionEn)} &nbsp;&middot;&nbsp; ${Zt(e.departmentEn)}</div>
+            <div style="display:inline-block;text-align:center;">
+              <div style="font-size:18px;font-weight:bold;color:${vi};line-height:22px;text-align:center;">${Zt(e.nameEn)}</div>
+              <div dir="rtl" style="font-size:18px;font-weight:bold;color:${vi};line-height:23px;text-align:center;font-family:'Cairo','Segoe UI',Tahoma,'Geeza Pro',Arial,sans-serif;">${Zt(e.nameAr)}</div>
+              <div style="font-size:12px;font-weight:bold;color:${Ir};margin-top:4px;line-height:16px;text-align:center;">${Zt(e.positionEn)} &nbsp;&middot;&nbsp; ${Zt(e.departmentEn)}</div>
+            </div>
           </td>
         </tr>
       </table>
@@ -123,7 +127,7 @@ For more information, see https://radix-ui.com/primitives/docs/components/${t.do
       <table cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
         <tr>
           <td style="border-radius:26px;background:${Ir};background:linear-gradient(90deg,${Ir} 0%,#b83f13 100%);">
-            <a href="${e.cardUrl}" target="_blank" style="display:inline-block;padding:11px 26px;font-size:13px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:26px;">&#128241;&nbsp; عرض البطاقة الرقمية &nbsp;&middot;&nbsp; View Digital Card</a>
+            <a href="${e.cardUrl}" target="_blank" style="display:inline-block;padding:11px 26px;font-size:13px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:26px;font-family:'Cairo','Segoe UI',Tahoma,'Geeza Pro',Arial,sans-serif;">&#128241;&nbsp; عرض البطاقة الرقمية &nbsp;&middot;&nbsp; View Digital Card</a>
           </td>
         </tr>
       </table>
