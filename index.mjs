@@ -56923,6 +56923,35 @@ function renderEventMetaTags(origin) {
 <meta name="twitter:description" content="${d}" />
 <meta name="twitter:image" content="${img}" />`;
 }
+function renderConnectMetaTags(company, origin) {
+  const orgName = company?.nameAr ?? company?.nameEn ?? "DSCC Group";
+  const title = `\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \xB7 ${orgName} | Connect`;
+  const description = "\u0643\u0644 \u0642\u0646\u0648\u0627\u062A \u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0627\u0644\u0631\u0633\u0645\u064A\u0629 \u0641\u064A \u0645\u0643\u0627\u0646 \u0648\u0627\u062D\u062F \u2014 \u0633\u0648\u0634\u064A\u0627\u0644 \u0645\u064A\u062F\u064A\u0627\u060C \u062A\u062D\u0645\u064A\u0644 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u062A\u0639\u0631\u064A\u0641\u064A (\u0639\u0631\u0628\u064A/English)\u060C \u0627\u0644\u0645\u0648\u0642\u0639 \u0639\u0644\u0649 \u062E\u0631\u0627\u0626\u0637 \u062C\u0648\u062C\u0644\u060C \u0648\u0623\u0631\u0642\u0627\u0645 \u0627\u0644\u062A\u0648\u0627\u0635\u0644 \u0627\u0644\u0645\u0628\u0627\u0634\u0631.";
+  const image = `${origin}/opengraph.jpg`;
+  const url2 = `${origin}/connect`;
+  const t = escapeHtml(title);
+  const d = escapeHtml(description);
+  const img = escapeHtml(image);
+  const u = escapeHtml(url2);
+  return `<title>${t}</title>
+<meta name="description" content="${d}" />
+<link rel="canonical" href="${u}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="${t}" />
+<meta property="og:description" content="${d}" />
+<meta property="og:image" content="${img}" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="${t}" />
+<meta property="og:url" content="${u}" />
+<meta property="og:site_name" content="DSCC Group" />
+<meta property="og:locale" content="ar_AR" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${t}" />
+<meta name="twitter:description" content="${d}" />
+<meta name="twitter:image" content="${img}" />`;
+}
 function renderShareHtml(emp, company, origin) {
   const cardUrl = `${origin}/${emp.slug}`;
   const metaTags = renderShareMetaTags(emp, company, origin);
@@ -57079,7 +57108,7 @@ if (fs.existsSync(indexHtmlPath)) {
   injectMeta2 = injectMeta;
   const indexHtml = fs.readFileSync(indexHtmlPath, "utf8");
   app.use(import_express9.default.static(publicDir, { index: false }));
-  const RESERVED_SLUGS = /* @__PURE__ */ new Set(["sign-in", "admin"]);
+  const RESERVED_SLUGS = /* @__PURE__ */ new Set(["sign-in", "admin", "connect"]);
   app.use(async (req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") return next();
     if (req.path.startsWith("/api") || req.path.startsWith("/c")) return next();
@@ -57092,6 +57121,13 @@ if (fs.existsSync(indexHtmlPath)) {
     }
     if (seg === "event") {
       html = injectMeta(indexHtml, renderEventMetaTags(getOrigin(req)));
+    } else if (seg === "connect") {
+      try {
+        const [company] = await db.select().from(companySettingsTable).limit(1);
+        html = injectMeta(indexHtml, renderConnectMetaTags(company, getOrigin(req)));
+      } catch (err) {
+        req.log?.warn({ err }, "connect meta injection failed");
+      }
     } else if (seg && !seg.includes("/") && !seg.includes(".") && !RESERVED_SLUGS.has(seg)) {
       try {
         const [emp] = await db.select().from(employeesTable).where(eq(employeesTable.slug, seg)).limit(1);
