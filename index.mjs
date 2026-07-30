@@ -56637,6 +56637,18 @@ function buildVCard(emp, company, origin) {
   return lines.join("\r\n");
 }
 
+// src/lib/reservedSlugs.ts
+var RESERVED_SLUGS = /* @__PURE__ */ new Set([
+  "admin",
+  "sign-in",
+  "connect",
+  "event",
+  "signatures",
+  "print",
+  "api",
+  "c"
+]);
+
 // src/lib/http.ts
 function firstHeader(value) {
   const raw = Array.isArray(value) ? value[0] : value;
@@ -56689,6 +56701,10 @@ router4.post("/employees", requireAuth, async (req, res) => {
     res.status(400).json({
       error: "Slug must be lowercase letters, numbers and hyphens (max 64)."
     });
+    return;
+  }
+  if (RESERVED_SLUGS.has(parsed.data.slug)) {
+    res.status(400).json({ error: "This slug is reserved by the app." });
     return;
   }
   try {
@@ -56755,6 +56771,10 @@ router4.patch("/employees/:id", requireAuth, async (req, res) => {
     res.status(400).json({
       error: "Slug must be lowercase letters, numbers and hyphens (max 64)."
     });
+    return;
+  }
+  if (parsed.data.slug !== void 0 && RESERVED_SLUGS.has(parsed.data.slug)) {
+    res.status(400).json({ error: "This slug is reserved by the app." });
     return;
   }
   try {
@@ -57108,7 +57128,6 @@ if (fs.existsSync(indexHtmlPath)) {
   injectMeta2 = injectMeta;
   const indexHtml = fs.readFileSync(indexHtmlPath, "utf8");
   app.use(import_express9.default.static(publicDir, { index: false }));
-  const RESERVED_SLUGS = /* @__PURE__ */ new Set(["sign-in", "admin", "connect"]);
   app.use(async (req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") return next();
     if (req.path.startsWith("/api") || req.path.startsWith("/c")) return next();
