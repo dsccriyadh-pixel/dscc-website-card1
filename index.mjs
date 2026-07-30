@@ -57130,7 +57130,8 @@ if (fs.existsSync(indexHtmlPath)) {
   app.use(import_express9.default.static(publicDir, { index: false }));
   app.use(async (req, res, next) => {
     if (req.method !== "GET" && req.method !== "HEAD") return next();
-    if (req.path.startsWith("/api") || req.path.startsWith("/c")) return next();
+    if (req.path.startsWith("/api/") || req.path === "/api" || req.path.startsWith("/c/") || req.path === "/c")
+      return next();
     let html = indexHtml;
     let seg = "";
     try {
