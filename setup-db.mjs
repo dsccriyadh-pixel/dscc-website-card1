@@ -23712,6 +23712,7 @@ var employeesTable = pgTable("employees", {
   mobile: text("mobile").notNull(),
   whatsapp: text("whatsapp").notNull(),
   email: text("email").notNull(),
+  emailSecondary: text("email_secondary"),
   bioEn: text("bio_en"),
   bioAr: text("bio_ar"),
   isActive: boolean("is_active").notNull().default(true),

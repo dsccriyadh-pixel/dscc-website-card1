@@ -1,0 +1,1 @@
+ALTER TABLE "employees" ADD COLUMN "email_secondary" text;
