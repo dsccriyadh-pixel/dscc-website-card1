@@ -52218,6 +52218,7 @@ var employeesTable = pgTable("employees", {
   mobile: text("mobile").notNull(),
   whatsapp: text("whatsapp").notNull(),
   email: text("email").notNull(),
+  emailSecondary: text("email_secondary"),
   bioEn: text("bio_en"),
   bioAr: text("bio_ar"),
   isActive: boolean("is_active").notNull().default(true),
@@ -56309,6 +56310,7 @@ var ListEmployeesResponseItem = objectType({
   "mobile": stringType(),
   "whatsapp": stringType(),
   "email": stringType(),
+  "emailSecondary": stringType().email().nullish(),
   "bioEn": stringType().nullish(),
   "bioAr": stringType().nullish(),
   "isActive": booleanType(),
@@ -56328,6 +56330,7 @@ var CreateEmployeeBody = objectType({
   "mobile": stringType(),
   "whatsapp": stringType(),
   "email": stringType(),
+  "emailSecondary": stringType().email().nullish(),
   "bioEn": stringType().nullish(),
   "bioAr": stringType().nullish(),
   "isActive": booleanType().optional(),
@@ -56350,6 +56353,7 @@ var GetEmployeeBySlugResponse = objectType({
   "mobile": stringType(),
   "whatsapp": stringType(),
   "email": stringType(),
+  "emailSecondary": stringType().email().nullish(),
   "bioEn": stringType().nullish(),
   "bioAr": stringType().nullish(),
   "isActive": booleanType(),
@@ -56371,6 +56375,7 @@ var UpdateEmployeeBody = objectType({
   "mobile": stringType().optional(),
   "whatsapp": stringType().optional(),
   "email": stringType().optional(),
+  "emailSecondary": stringType().email().nullish(),
   "bioEn": stringType().nullish(),
   "bioAr": stringType().nullish(),
   "isActive": booleanType().optional(),
@@ -56390,6 +56395,7 @@ var UpdateEmployeeResponse = objectType({
   "mobile": stringType(),
   "whatsapp": stringType(),
   "email": stringType(),
+  "emailSecondary": stringType().email().nullish(),
   "bioEn": stringType().nullish(),
   "bioAr": stringType().nullish(),
   "isActive": booleanType(),
@@ -56611,6 +56617,9 @@ function buildVCard(emp, company, origin) {
     `TEL;TYPE=CELL:${esc2(emp.whatsapp)}`,
     `EMAIL;TYPE=WORK:${esc2(emp.email)}`
   ];
+  if (emp.emailSecondary) {
+    lines.push(`EMAIL;TYPE=WORK:${esc2(emp.emailSecondary)}`);
+  }
   if (emp.photoUrl) {
     const photo = photoLine(emp.photoUrl, origin);
     if (photo) lines.push(photo);
@@ -56872,7 +56881,8 @@ function escapeHtml(value) {
 function buildShareMeta(emp, company, origin) {
   const orgName = company?.nameAr ?? company?.nameEn ?? "DSCC Group";
   const cardUrl = `${origin}/${emp.slug}`;
-  const title = `${emp.fullNameAr} \xB7 ${emp.positionAr}`;
+  const displayName = emp.fullNameAr.trim() || emp.fullNameEn;
+  const title = `${displayName} \xB7 ${emp.positionAr}`;
   const description = `${emp.positionAr} \u2014 ${emp.departmentAr} \xB7 ${orgName}. \u0627\u0636\u063A\u0637 \u0644\u0639\u0631\u0636 \u0627\u0644\u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0631\u0642\u0645\u064A\u0629: \u0627\u062A\u0635\u0627\u0644\u060C \u0648\u0627\u062A\u0633\u0627\u0628\u060C \u0628\u0631\u064A\u062F\u060C \u0648\u062D\u0641\u0638 \u062C\u0647\u0629 \u0627\u0644\u0627\u062A\u0635\u0627\u0644.`;
   let image;
   if (emp.shareImageUrl) {
@@ -56986,7 +56996,7 @@ ${metaTags}
 <script>window.location.replace(${JSON.stringify(cardUrl).replace(/</g, "\\u003c")});</script>
 </head>
 <body>
-<p>Redirecting to <a href="${url2}">${escapeHtml(emp.fullNameAr)}</a></p>
+<p>Redirecting to <a href="${url2}">${escapeHtml(emp.fullNameAr.trim() || emp.fullNameEn)}</a></p>
 </body>
 </html>`;
 }
